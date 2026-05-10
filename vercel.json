@@ -11,11 +11,5 @@
       "src": "/api/(.*)",
       "dest": "/api/$1"
     }
-  ],
-  "env": {
-    "GOOGLE_SHEET_ID": "@google_sheet_id",
-    "GOOGLE_OAUTH_CLIENT_ID": "@google_oauth_client_id",
-    "GOOGLE_OAUTH_CLIENT_SECRET": "@google_oauth_client_secret",
-    "SUPER_ADMIN_EMAIL": "@super_admin_email"
-  }
+  ]
 }
