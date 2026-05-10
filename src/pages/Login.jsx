@@ -20,11 +20,13 @@ export default function Login({ onLogin }) {
       document.body.appendChild(script)
 
       script.onload = () => {
-        window.google.accounts.idl.initialize({
+        window.google.accounts.id.initialize({
           client_id: import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID,
-          callback: handleCredentialResponse
+          callback: handleCredentialResponse,
+          auto_select: false,
+          cancel_on_tap_outside: true
         })
-        window.google.accounts.idl.prompt()
+        window.google.accounts.id.prompt()
       }
 
       script.onerror = () => {

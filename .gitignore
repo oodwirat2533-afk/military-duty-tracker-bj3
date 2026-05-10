@@ -29,6 +29,8 @@ Thumbs.db
 
 # Google Sheets credentials (keep this private)
 credentials.json
+army-bj3-2d78011d0c1a.json
 *.json
 !package.json
 !package-lock.json
+!vercel.json

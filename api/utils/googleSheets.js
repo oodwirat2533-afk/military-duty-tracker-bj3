@@ -2,15 +2,26 @@ import { google } from 'googleapis'
 
 const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID || '1uwLHN0Id4ue3PnUcrJGc32YmgxzNz0rC9pId3ikalik'
 
-// Read credentials from file
-import { readFileSync } from 'fs'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const credentialsPath = join(__dirname, '../../army-bj3-2d78011d0c1a.json')
-const credentials = JSON.parse(readFileSync(credentialsPath, 'utf8'))
+// For Vercel deployment, we need to handle credentials differently
+let credentials
+try {
+  // Try to read from file (for local development)
+  const { readFileSync } = await import('fs')
+  const { fileURLToPath } = await import('url')
+  const { dirname, join } = await import('path')
+  
+  const __filename = fileURLToPath(import.meta.url)
+  const __dirname = dirname(__filename)
+  const credentialsPath = join(__dirname, '../../army-bj3-2d78011d0c1a.json')
+  credentials = JSON.parse(readFileSync(credentialsPath, 'utf8'))
+} catch (error) {
+  // For Vercel, use environment variable
+  if (process.env.GOOGLE_SHEETS_CREDENTIALS) {
+    credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS)
+  } else {
+    throw new Error('Google Sheets credentials not found')
+  }
+}
 
 const auth = new google.auth.GoogleAuth({
   credentials,
