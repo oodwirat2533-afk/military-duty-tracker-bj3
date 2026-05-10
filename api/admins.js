@@ -17,16 +17,24 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
       const admins = await readTab(TABS.ADMINS)
-      res.json(admins)
+      const mappedAdmins = admins.map(a => ({
+        email: a.Email || '',
+        role: a['บทบาท'] || 'admin',
+        created_at: a['วันที่เพิ่ม'] || ''
+      }))
+      res.json(mappedAdmins)
     } else if (req.method === 'POST') {
-      const { Email, บทบาท } = req.body
-      const data = [Email, บทบาท, new Date().toISOString().split('T')[0]]
+      const { email } = req.body
+      if (!email) {
+        return res.status(400).json({ error: 'กรุณาระบุ email' })
+      }
+      const data = [email, 'admin', new Date().toISOString().split('T')[0]]
       await appendToTab(TABS.ADMINS, data)
       res.json({ success: true })
     } else if (req.method === 'DELETE') {
-      const { Email } = req.body
+      const { email } = req.body
       const admins = await readTab(TABS.ADMINS)
-      const index = admins.findIndex(a => a.Email === Email)
+      const index = admins.findIndex(a => a.Email === email)
       if (index === -1) {
         return res.status(404).json({ error: 'ไม่พบ Admin' })
       }
