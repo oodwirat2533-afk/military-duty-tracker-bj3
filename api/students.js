@@ -29,7 +29,8 @@ export default async function handler(req, res) {
       // Filter by year_level (admin's year_level) if provided
       const { year_level } = req.query || {}
       if (year_level) {
-        mappedStudents = mappedStudents.filter(s => s.year_level === year_level)
+        const trimmedYearLevel = year_level.trim()
+        mappedStudents = mappedStudents.filter(s => (s.year_level || '').trim() === trimmedYearLevel)
       }
       res.json(mappedStudents)
     } else if (req.method === 'POST') {

@@ -45,10 +45,10 @@ export default async function handler(req, res) {
     })
     const rows = adminResponse.data.values || []
     const admins = rows.slice(1).map(row => ({
-      email: row[0],
-      role: row[1],
-      year_level: row[2],
-      created_at: row[3]
+      email: (row[0] || '').trim(),
+      role: (row[1] || '').trim(),
+      year_level: (row[2] || '').trim(),
+      created_at: (row[3] || '').trim()
     }))
     const admin = admins.find(a => a.email === email)
     const isAdmin = !!admin
@@ -65,7 +65,7 @@ export default async function handler(req, res) {
       user: {
         email,
         role: isSuperAdmin ? 'super_admin' : 'admin',
-        year_level: isSuperAdmin ? '' : (admin?.year_level || '')
+        year_level: isSuperAdmin ? '' : (admin?.year_level || '').trim()
       }
     })
   } catch (error) {

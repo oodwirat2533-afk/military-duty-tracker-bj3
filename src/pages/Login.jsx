@@ -12,6 +12,30 @@ export default function Login({ onLogin }) {
     setError('')
 
     try {
+      // Check if Google Identity Services is already loaded
+      if (window.google?.accounts?.id) {
+        window.google.accounts.id.prompt()
+        return
+      }
+
+      // Check if script is already being loaded
+      const existingScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]')
+      if (existingScript) {
+        // Script exists but may not be ready yet, wait for it
+        existingScript.addEventListener('load', () => {
+          if (window.google?.accounts?.id) {
+            window.google.accounts.id.initialize({
+              client_id: import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID,
+              callback: handleCredentialResponse,
+              auto_select: false,
+              cancel_on_tap_outside: true
+            })
+            window.google.accounts.id.prompt()
+          }
+        })
+        return
+      }
+
       // Load Google Identity Services
       const script = document.createElement('script')
       script.src = 'https://accounts.google.com/gsi/client'
