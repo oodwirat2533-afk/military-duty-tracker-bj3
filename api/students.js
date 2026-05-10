@@ -1,4 +1,4 @@
-import { readTab, appendToTab, updateTab, deleteRow, TABS } from './utils/googleSheets.js'
+import { sheets, SPREADSHEET_ID, appendToTab, updateTab, deleteRow, TABS } from './utils/googleSheets.js'
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', true)
@@ -16,21 +16,26 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const students = await readTab(TABS.STUDENTS)
-      let mappedStudents = students.map(s => ({
-        student_id: s['รหัสประจำตัวนักเรียน'] || '',
-        name: s['ชื่อ-นามสกุล'] || '',
-        year: s['ชั้นปี'] || '',
-        classroom: s['ห้องเรียน'] || '',
-        number: s['เลขที่'] || '',
-        year_level: s['ชั้นปีที่'] || '',
-        created_at: s['วันที่เพิ่ม'] || ''
+      // Read raw rows directly to avoid header mapping issues
+      const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${TABS.STUDENTS}!A2:G1000`
+      })
+      const rows = response.data.values || []
+      let mappedStudents = rows.map(row => ({
+        student_id: (row[0] || '').trim(),
+        name: (row[1] || '').trim(),
+        year: (row[2] || '').trim(),
+        classroom: (row[3] || '').trim(),
+        number: (row[4] || '').trim(),
+        year_level: (row[5] || '').trim(),
+        created_at: (row[6] || '').trim()
       }))
       // Filter by year_level (admin's year_level) if provided
       const { year_level } = req.query || {}
       if (year_level) {
         const trimmedYearLevel = year_level.trim()
-        mappedStudents = mappedStudents.filter(s => (s.year_level || '').trim() === trimmedYearLevel)
+        mappedStudents = mappedStudents.filter(s => s.year_level === trimmedYearLevel)
       }
       res.json(mappedStudents)
     } else if (req.method === 'POST') {
@@ -61,19 +66,29 @@ export default async function handler(req, res) {
       }
     } else if (req.method === 'PUT') {
       const { student_id, name, year, classroom, number, year_level } = req.body
-      const students = await readTab(TABS.STUDENTS)
-      const index = students.findIndex(s => s['รหัสประจำตัวนักเรียน'] === student_id)
+      // Read raw rows directly
+      const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${TABS.STUDENTS}!A2:G1000`
+      })
+      const rows = response.data.values || []
+      const index = rows.findIndex(row => (row[0] || '').trim() === student_id.trim())
       if (index === -1) {
         return res.status(404).json({ error: 'ไม่พบนักเรียน' })
       }
       const range = `${TABS.STUDENTS}!A${index + 2}:G${index + 2}`
-      const data = [[student_id, name, year, classroom, number, year_level, students[index]['วันที่เพิ่ม']]]
+      const data = [[student_id, name, year, classroom, number, year_level, rows[index][6] || '']]
       await updateTab(TABS.STUDENTS, range, data)
       res.json({ success: true })
     } else if (req.method === 'DELETE') {
       const { student_id } = req.body
-      const students = await readTab(TABS.STUDENTS)
-      const index = students.findIndex(s => s['รหัสประจำตัวนักเรียน'] === student_id)
+      // Read raw rows directly
+      const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${TABS.STUDENTS}!A2:G1000`
+      })
+      const rows = response.data.values || []
+      const index = rows.findIndex(row => (row[0] || '').trim() === student_id.trim())
       if (index === -1) {
         return res.status(404).json({ error: 'ไม่พบนักเรียน' })
       }

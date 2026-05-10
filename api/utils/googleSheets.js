@@ -85,16 +85,15 @@ export async function initializeTabs() {
         range: `${tabName}!A1:Z1`
       })
 
-      if (!range.data.values || range.data.values.length === 0) {
-        await sheets.spreadsheets.values.update({
-          spreadsheetId: SPREADSHEET_ID,
-          range: `${tabName}!A1`,
-          valueInputOption: 'RAW',
-          requestBody: {
-            values: [headerRow]
-          }
-        })
-      }
+      // Always update headers to ensure consistency
+      await sheets.spreadsheets.values.update({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${tabName}!A1`,
+        valueInputOption: 'RAW',
+        requestBody: {
+          values: [headerRow]
+        }
+      })
     }
 
     console.log('Tabs initialized successfully')
