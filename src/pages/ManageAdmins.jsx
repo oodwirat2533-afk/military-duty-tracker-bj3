@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+const YEAR_OPTIONS = ['ม.4', 'ม.5', 'ม.6']
+
 export default function ManageAdmins({ user }) {
   const [admins, setAdmins] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
   const [newAdminEmail, setNewAdminEmail] = useState('')
+  const [newAdminYear, setNewAdminYear] = useState('')
+  const [editingAdmin, setEditingAdmin] = useState(null)
+  const [editYear, setEditYear] = useState('')
 
   useEffect(() => {
     if (user?.role !== 'super_admin') {
@@ -30,14 +36,36 @@ export default function ManageAdmins({ user }) {
   const handleAddAdmin = async (e) => {
     e.preventDefault()
     try {
-      await axios.post('/api/admins', { email: newAdminEmail })
+      await axios.post('/api/admins', { email: newAdminEmail, year_level: newAdminYear })
       setShowModal(false)
       setNewAdminEmail('')
+      setNewAdminYear('')
       fetchAdmins()
       alert('เพิ่ม Admin สำเร็จ')
     } catch (error) {
       console.error('Error adding admin:', error)
       alert('เกิดข้อผิดพลาดในการเพิ่ม Admin')
+    }
+  }
+
+  const openEditModal = (admin) => {
+    setEditingAdmin(admin)
+    setEditYear(admin.year_level || '')
+    setShowEditModal(true)
+  }
+
+  const handleUpdateAdmin = async (e) => {
+    e.preventDefault()
+    try {
+      await axios.put('/api/admins', { email: editingAdmin.email, year_level: editYear })
+      setShowEditModal(false)
+      setEditingAdmin(null)
+      setEditYear('')
+      fetchAdmins()
+      alert('อัพเดท Admin สำเร็จ')
+    } catch (error) {
+      console.error('Error updating admin:', error)
+      alert('เกิดข้อผิดพลาดในการอัพเดท Admin')
     }
   }
 
@@ -80,6 +108,7 @@ export default function ManageAdmins({ user }) {
               <tr>
                 <th className="px-6 py-3 text-left">Email</th>
                 <th className="px-6 py-3 text-left">บทบาท</th>
+                <th className="px-6 py-3 text-left">ชั้นปีที่รับผิดชอบ</th>
                 <th className="px-6 py-3 text-left">วันที่เพิ่ม</th>
                 <th className="px-6 py-3 text-center">จัดการ</th>
               </tr>
@@ -90,27 +119,36 @@ export default function ManageAdmins({ user }) {
                   <td className="px-6 py-4">{admin.email}</td>
                   <td className="px-6 py-4">
                     <span className={`px-3 py-1 rounded-full text-sm ${
-                      admin.role === 'super_admin' 
-                        ? 'bg-purple-100 text-purple-800' 
+                      admin.role === 'super_admin'
+                        ? 'bg-purple-100 text-purple-800'
                         : 'bg-blue-100 text-blue-800'
                     }`}>
                       {admin.role === 'super_admin' ? 'Super Admin' : 'Admin'}
                     </span>
                   </td>
+                  <td className="px-6 py-4">{admin.year_level || '-'}</td>
                   <td className="px-6 py-4">
-                    {new Date(admin.created_at).toLocaleDateString('th-TH')}
+                    {admin.created_at ? new Date(admin.created_at).toLocaleDateString('th-TH') : '-'}
                   </td>
                   <td className="px-6 py-4 text-center">
                     {admin.role !== 'super_admin' && (
-                      <button
-                        onClick={() => handleDeleteAdmin(admin.email)}
-                        className="bg-red-500 hover:bg-red-600 text-white text-sm py-1 px-3 rounded"
-                      >
-                        ลบ
-                      </button>
+                      <div className="flex gap-2 justify-center">
+                        <button
+                          onClick={() => openEditModal(admin)}
+                          className="bg-blue-500 hover:bg-blue-600 text-white text-sm py-1 px-3 rounded"
+                        >
+                          แก้ไข
+                        </button>
+                        <button
+                          onClick={() => handleDeleteAdmin(admin.email)}
+                          className="bg-red-500 hover:bg-red-600 text-white text-sm py-1 px-3 rounded"
+                        >
+                          ลบ
+                        </button>
+                      </div>
                     )}
                     {admin.role === 'super_admin' && (
-                      <span className="text-gray-400 text-sm">ไม่สามารถลบ Super Admin</span>
+                      <span className="text-gray-400 text-sm">ไม่สามารถแก้ไข Super Admin</span>
                     )}
                   </td>
                 </tr>
@@ -124,7 +162,7 @@ export default function ManageAdmins({ user }) {
             <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
               <h2 className="text-2xl font-bold text-gray-800 mb-6">เพิ่ม Admin ใหม่</h2>
               <form onSubmit={handleAddAdmin}>
-                <div className="mb-6">
+                <div className="mb-4">
                   <label className="block text-gray-700 font-semibold mb-2">Email ของ Admin</label>
                   <input
                     type="email"
@@ -134,6 +172,17 @@ export default function ManageAdmins({ user }) {
                     required
                     placeholder="กรอก email"
                   />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-2">ชั้นปีที่รับผิดชอบ</label>
+                  <select
+                    value={newAdminYear}
+                    onChange={(e) => setNewAdminYear(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    <option value="">เลือกชั้นปี (ทั้งหมด)</option>
+                    {YEAR_OPTIONS.map(y => <option key={y} value={y}>{y}</option>)}
+                  </select>
                 </div>
                 <div className="mb-4 p-4 bg-yellow-50 rounded-lg">
                   <p className="text-sm text-yellow-800">
@@ -150,6 +199,51 @@ export default function ManageAdmins({ user }) {
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
+                    className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded"
+                  >
+                    ยกเลิก
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {showEditModal && editingAdmin && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">แก้ไขชั้นปีที่รับผิดชอบ</h2>
+              <form onSubmit={handleUpdateAdmin}>
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-2">Email</label>
+                  <input
+                    type="text"
+                    value={editingAdmin.email}
+                    disabled
+                    className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-600"
+                  />
+                </div>
+                <div className="mb-6">
+                  <label className="block text-gray-700 font-semibold mb-2">ชั้นปีที่รับผิดชอบ</label>
+                  <select
+                    value={editYear}
+                    onChange={(e) => setEditYear(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    <option value="">ทั้งหมด</option>
+                    {YEAR_OPTIONS.map(y => <option key={y} value={y}>{y}</option>)}
+                  </select>
+                </div>
+                <div className="flex gap-4">
+                  <button
+                    type="submit"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    บันทึก
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowEditModal(false)}
                     className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded"
                   >
                     ยกเลิก

@@ -71,10 +71,10 @@ export async function initializeTabs() {
     // Add headers to each tab
     const headers = {
       [TABS.CLASSROOMS]: ['รหัสห้องชั้นปี', 'ชื่อห้องชั้นปี', 'ปีการศึกษา', 'วันที่สร้าง'],
-      [TABS.STUDENTS]: ['รหัสประจำตัวนักเรียน', 'ชื่อ', 'รหัสห้องชั้นปี', 'วันที่เพิ่ม'],
+      [TABS.STUDENTS]: ['รหัสประจำตัวนักเรียน', 'ชื่อ-นามสกุล', 'ชั้นปี', 'ห้องเรียน', 'เลขที่', 'วันที่เพิ่ม'],
       [TABS.DUTIES]: ['รหัสงาน', 'ชื่องาน', 'วันที่', 'คำอธิบาย', 'สถานะงาน'],
       [TABS.STATUS]: ['รหัสประจำตัวนักเรียน', 'รหัสงาน', 'สถานะ', 'วันที่บันทึก'],
-      [TABS.ADMINS]: ['Email', 'บทบาท', 'วันที่เพิ่ม']
+      [TABS.ADMINS]: ['Email', 'บทบาท', 'ชั้นปีที่รับผิดชอบ', 'วันที่เพิ่ม']
     }
 
     for (const [tabName, headerRow] of Object.entries(headers)) {

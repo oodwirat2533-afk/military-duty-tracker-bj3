@@ -1,4 +1,4 @@
-import { readTab, appendToTab, deleteRow, TABS } from './utils/googleSheets.js'
+import { readTab, appendToTab, updateTab, deleteRow, TABS } from './utils/googleSheets.js'
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', true)
@@ -20,16 +20,28 @@ export default async function handler(req, res) {
       const mappedAdmins = admins.map(a => ({
         email: a.Email || '',
         role: a['บทบาท'] || 'admin',
+        year_level: a['ชั้นปีที่รับผิดชอบ'] || '',
         created_at: a['วันที่เพิ่ม'] || ''
       }))
       res.json(mappedAdmins)
     } else if (req.method === 'POST') {
-      const { email } = req.body
+      const { email, year_level } = req.body
       if (!email) {
         return res.status(400).json({ error: 'กรุณาระบุ email' })
       }
-      const data = [email, 'admin', new Date().toISOString().split('T')[0]]
+      const data = [email, 'admin', year_level || '', new Date().toISOString().split('T')[0]]
       await appendToTab(TABS.ADMINS, data)
+      res.json({ success: true })
+    } else if (req.method === 'PUT') {
+      const { email, year_level } = req.body
+      const admins = await readTab(TABS.ADMINS)
+      const index = admins.findIndex(a => a.Email === email)
+      if (index === -1) {
+        return res.status(404).json({ error: 'ไม่พบ Admin' })
+      }
+      const range = `${TABS.ADMINS}!A${index + 2}:D${index + 2}`
+      const data = [[email, admins[index]['บทบาท'] || 'admin', year_level || '', admins[index]['วันที่เพิ่ม']]]
+      await updateTab(TABS.ADMINS, range, data)
       res.json({ success: true })
     } else if (req.method === 'DELETE') {
       const { email } = req.body
