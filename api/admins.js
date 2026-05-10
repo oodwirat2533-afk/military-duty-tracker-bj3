@@ -1,4 +1,4 @@
-import { readTab, appendToTab, updateTab, deleteRow, TABS } from './utils/googleSheets.js'
+import { readTab, appendToTab, updateTab, deleteRow, TABS, sheets, SPREADSHEET_ID } from './utils/googleSheets.js'
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', true)
@@ -16,12 +16,16 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const admins = await readTab(TABS.ADMINS)
-      const mappedAdmins = admins.map(a => ({
-        email: a.Email || '',
-        role: a['บทบาท'] || 'admin',
-        year_level: a['ชั้นปีที่รับผิดชอบ'] || '',
-        created_at: a['วันที่เพิ่ม'] || ''
+      const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${TABS.ADMINS}!A1:D1000`
+      })
+      const rows = response.data.values || []
+      const mappedAdmins = rows.slice(1).map(row => ({
+        email: row[0] || '',
+        role: row[1] || 'admin',
+        year_level: row[2] || '',
+        created_at: row[3] || ''
       }))
       res.json(mappedAdmins)
     } else if (req.method === 'POST') {

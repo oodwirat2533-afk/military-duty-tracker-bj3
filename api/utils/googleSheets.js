@@ -30,6 +30,8 @@ const auth = new google.auth.GoogleAuth({
 
 const sheets = google.sheets({ version: 'v4', auth })
 
+export { sheets, SPREADSHEET_ID }
+
 // Tab names
 const TABS = {
   CLASSROOMS: 'ห้องชั้นปี',
