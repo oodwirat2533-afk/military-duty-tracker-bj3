@@ -9,6 +9,7 @@ import AddDuty from './pages/AddDuty'
 import RecordStatus from './pages/RecordStatus'
 import ManageAdmins from './pages/ManageAdmins'
 import Reports from './pages/Reports'
+import StudentList from './pages/StudentList'
 import StudentStatus from './pages/StudentStatus'
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
           <Route path="/record-status" element={user ? <RecordStatus /> : <Navigate to="/login" />} />
           <Route path="/manage-admins" element={user ? <ManageAdmins user={user} /> : <Navigate to="/login" />} />
           <Route path="/reports" element={user ? <Reports /> : <Navigate to="/login" />} />
+          <Route path="/students" element={user ? <StudentList user={user} /> : <Navigate to="/login" />} />
         </Route>
       </Routes>
     </BrowserRouter>

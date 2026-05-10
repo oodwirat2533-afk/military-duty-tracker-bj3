@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
       const students = await readTab(TABS.STUDENTS)
-      const mappedStudents = students.map(s => ({
+      let mappedStudents = students.map(s => ({
         student_id: s['รหัสประจำตัวนักเรียน'] || '',
         name: s['ชื่อ-นามสกุล'] || '',
         year: s['ชั้นปี'] || '',
@@ -25,6 +25,11 @@ export default async function handler(req, res) {
         number: s['เลขที่'] || '',
         created_at: s['วันที่เพิ่ม'] || ''
       }))
+      // Filter by year_level if provided
+      const { year_level } = req.query || {}
+      if (year_level) {
+        mappedStudents = mappedStudents.filter(s => s.year === year_level)
+      }
       res.json(mappedStudents)
     } else if (req.method === 'POST') {
       const body = req.body

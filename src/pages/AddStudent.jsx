@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import * as XLSX from 'xlsx'
 
-const YEAR_OPTIONS = ['ม.4', 'ม.5', 'ม.6']
+const YEAR_OPTIONS = ['1', '2', '3']
 
 export default function AddStudent() {
   const [loading, setLoading] = useState(false)
@@ -87,8 +87,8 @@ export default function AddStudent() {
   const downloadTemplate = () => {
     const templateData = [
       ['รหัสประจำตัวนักเรียน', 'ชื่อ-นามสกุล', 'ระดับชั้น', 'ห้องเรียน', 'เลขที่'],
-      ['56001', 'สมชาย ใจดี', 'ม.4', '4/1', '1'],
-      ['56002', 'สมหญิง รักเรียน', 'ม.4', '4/1', '2']
+      ['56001', 'สมชาย ใจดี', '1', '1', '1'],
+      ['56002', 'สมหญิง รักเรียน', '1', '1', '2']
     ]
     const ws = XLSX.utils.aoa_to_sheet(templateData)
     const wb = XLSX.utils.book_new()
@@ -167,7 +167,7 @@ export default function AddStudent() {
                   >
                     <option value="">เลือกระดับชั้น</option>
                     {YEAR_OPTIONS.map(y => (
-                      <option key={y} value={y}>{y}</option>
+                      <option key={y} value={y}>ชั้นปีที่ {y}</option>
                     ))}
                   </select>
                 </div>
@@ -274,7 +274,7 @@ export default function AddStudent() {
                       <tr>
                         <th className="px-4 py-2 text-left">รหัสประจำตัว</th>
                         <th className="px-4 py-2 text-left">ชื่อ-นามสกุล</th>
-                        <th className="px-4 py-2 text-left">ชั้นปี</th>
+                        <th className="px-4 py-2 text-left">ระดับชั้น</th>
                         <th className="px-4 py-2 text-left">ห้องเรียน</th>
                         <th className="px-4 py-2 text-left">เลขที่</th>
                         <th className="px-4 py-2 text-center">ลบ</th>
@@ -285,7 +285,7 @@ export default function AddStudent() {
                         <tr key={i} className="border-b hover:bg-gray-50">
                           <td className="px-4 py-2">{s.student_id}</td>
                           <td className="px-4 py-2">{s.name}</td>
-                          <td className="px-4 py-2">{s.year}</td>
+                          <td className="px-4 py-2">{s.year ? `ชั้นปีที่ ${s.year}` : '-'}</td>
                           <td className="px-4 py-2">{s.classroom}</td>
                           <td className="px-4 py-2">{s.number}</td>
                           <td className="px-4 py-2 text-center">

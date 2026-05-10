@@ -8,6 +8,23 @@ export default function Dashboard({ user }) {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <Link
+            to="/students"
+            className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition duration-300"
+          >
+            <div className="flex items-center gap-4">
+              <div className="bg-teal-100 p-3 rounded-full">
+                <svg className="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800">รายชื่อนักเรียน</h2>
+                <p className="text-gray-600 text-sm">ดูรายชื่อนักเรียนตามชั้นปีที่รับผิดชอบ</p>
+              </div>
+            </div>
+          </Link>
+
+          <Link
             to="/add-student"
             className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition duration-300"
           >

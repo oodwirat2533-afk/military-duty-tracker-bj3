@@ -1,5 +1,5 @@
 import { OAuth2Client } from 'google-auth-library'
-import { readTab, TABS } from './utils/googleSheets.js'
+import { TABS, sheets, SPREADSHEET_ID } from './utils/googleSheets.js'
 
 const client = new OAuth2Client(process.env.GOOGLE_OAUTH_CLIENT_ID)
 
@@ -38,9 +38,20 @@ export default async function handler(req, res) {
     const payload = ticket.getPayload()
     const email = payload.email
 
-    // Check if email is in Admin list
-    const admins = await readTab(TABS.ADMINS)
-    const isAdmin = admins.some(a => a.Email === email)
+    // Check if email is in Admin list (read raw rows to handle header inconsistencies)
+    const adminResponse = await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${TABS.ADMINS}!A1:D1000`
+    })
+    const rows = adminResponse.data.values || []
+    const admins = rows.slice(1).map(row => ({
+      email: row[0],
+      role: row[1],
+      year_level: row[2],
+      created_at: row[3]
+    }))
+    const admin = admins.find(a => a.email === email)
+    const isAdmin = !!admin
     const SUPER_ADMIN_EMAIL = process.env.SUPER_ADMIN_EMAIL || 'ood.wirat2533@gmail.com'
     const isSuperAdmin = email === SUPER_ADMIN_EMAIL
 
@@ -53,7 +64,8 @@ export default async function handler(req, res) {
       success: true,
       user: {
         email,
-        role: isSuperAdmin ? 'super_admin' : 'admin'
+        role: isSuperAdmin ? 'super_admin' : 'admin',
+        year_level: isSuperAdmin ? '' : (admin?.year_level || '')
       }
     })
   } catch (error) {
