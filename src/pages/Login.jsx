@@ -1,18 +1,43 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import axios from 'axios'
 
 export default function Login({ onLogin }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+
+  // Auto-trigger Google login if auto=true is in URL
+  useEffect(() => {
+    const auto = searchParams.get('auto')
+    if (auto === 'true') {
+      // Small delay to ensure component is fully mounted
+      const timer = setTimeout(() => {
+        handleGoogleLogin()
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [])
+
+  const initGoogleAndPrompt = () => {
+    if (window.google?.accounts?.id) {
+      window.google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID,
+        callback: handleCredentialResponse,
+        auto_select: 'true',
+        cancel_on_tap_outside: true
+      })
+      window.google.accounts.id.prompt()
+    }
+  }
 
   const handleGoogleLogin = async () => {
     setLoading(true)
     setError('')
 
     try {
-      // Check if Google Identity Services is already loaded
+      // Check if Google Identity Services is already loaded and initialized
       if (window.google?.accounts?.id) {
         window.google.accounts.id.prompt()
         return
@@ -23,15 +48,7 @@ export default function Login({ onLogin }) {
       if (existingScript) {
         // Script exists but may not be ready yet, wait for it
         existingScript.addEventListener('load', () => {
-          if (window.google?.accounts?.id) {
-            window.google.accounts.id.initialize({
-              client_id: import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID,
-              callback: handleCredentialResponse,
-              auto_select: false,
-              cancel_on_tap_outside: true
-            })
-            window.google.accounts.id.prompt()
-          }
+          initGoogleAndPrompt()
         })
         return
       }
@@ -44,13 +61,7 @@ export default function Login({ onLogin }) {
       document.body.appendChild(script)
 
       script.onload = () => {
-        window.google.accounts.id.initialize({
-          client_id: import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID,
-          callback: handleCredentialResponse,
-          auto_select: false,
-          cancel_on_tap_outside: true
-        })
-        window.google.accounts.id.prompt()
+        initGoogleAndPrompt()
       }
 
       script.onerror = () => {

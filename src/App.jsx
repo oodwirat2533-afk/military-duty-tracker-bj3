@@ -42,13 +42,13 @@ function App() {
         
         {/* Protected routes */}
         <Route element={<Layout user={user} onLogout={handleLogout} />}>
-          <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/login" />} />
-          <Route path="/add-student" element={user ? <AddStudent user={user} /> : <Navigate to="/login" />} />
-          <Route path="/add-duty" element={user ? <AddDuty /> : <Navigate to="/login" />} />
-          <Route path="/record-status" element={user ? <RecordStatus /> : <Navigate to="/login" />} />
-          <Route path="/manage-admins" element={user ? <ManageAdmins user={user} /> : <Navigate to="/login" />} />
-          <Route path="/reports" element={user ? <Reports /> : <Navigate to="/login" />} />
-          <Route path="/students" element={user ? <StudentList user={user} /> : <Navigate to="/login" />} />
+          <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/login?auto=true" />} />
+          <Route path="/add-student" element={user ? <AddStudent user={user} /> : <Navigate to="/login?auto=true" />} />
+          <Route path="/add-duty" element={user ? <AddDuty /> : <Navigate to="/login?auto=true" />} />
+          <Route path="/record-status" element={user ? <RecordStatus /> : <Navigate to="/login?auto=true" />} />
+          <Route path="/manage-admins" element={user ? <ManageAdmins user={user} /> : <Navigate to="/login?auto=true" />} />
+          <Route path="/reports" element={user ? <Reports /> : <Navigate to="/login?auto=true" />} />
+          <Route path="/students" element={user ? <StudentList user={user} /> : <Navigate to="/login?auto=true" />} />
         </Route>
       </Routes>
     </BrowserRouter>
