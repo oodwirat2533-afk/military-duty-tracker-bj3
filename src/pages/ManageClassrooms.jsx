@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 export default function ManageClassrooms() {
+  const navigate = useNavigate()
   const [classrooms, setClassrooms] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
@@ -68,6 +70,12 @@ export default function ManageClassrooms() {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-green-800">จัดการห้องชั้นปี</h1>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded-lg"
+          >
+            ← กลับ Dashboard
+          </button>
           <button
             onClick={() => setShowModal(true)}
             className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"

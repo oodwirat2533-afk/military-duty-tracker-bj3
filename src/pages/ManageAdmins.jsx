@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const YEAR_OPTIONS = ['ม.4', 'ม.5', 'ม.6']
+const YEAR_OPTIONS = ['1', '2', '3']
 
 export default function ManageAdmins({ user }) {
   const [admins, setAdmins] = useState([])
@@ -108,7 +108,7 @@ export default function ManageAdmins({ user }) {
               <tr>
                 <th className="px-6 py-3 text-left">Email</th>
                 <th className="px-6 py-3 text-left">บทบาท</th>
-                <th className="px-6 py-3 text-left">ชั้นปีที่รับผิดชอบ</th>
+                <th className="px-6 py-3 text-left">ชั้นปีที่</th>
                 <th className="px-6 py-3 text-left">วันที่เพิ่ม</th>
                 <th className="px-6 py-3 text-center">จัดการ</th>
               </tr>
@@ -126,7 +126,7 @@ export default function ManageAdmins({ user }) {
                       {admin.role === 'super_admin' ? 'Super Admin' : 'Admin'}
                     </span>
                   </td>
-                  <td className="px-6 py-4">{admin.year_level || '-'}</td>
+                  <td className="px-6 py-4">{admin.year_level ? `ชั้นปีที่ ${admin.year_level}` : '-'}</td>
                   <td className="px-6 py-4">
                     {admin.created_at ? new Date(admin.created_at).toLocaleDateString('th-TH') : '-'}
                   </td>
@@ -174,14 +174,14 @@ export default function ManageAdmins({ user }) {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-gray-700 font-semibold mb-2">ชั้นปีที่รับผิดชอบ</label>
+                  <label className="block text-gray-700 font-semibold mb-2">ชั้นปีที่</label>
                   <select
                     value={newAdminYear}
                     onChange={(e) => setNewAdminYear(e.target.value)}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   >
-                    <option value="">เลือกชั้นปี (ทั้งหมด)</option>
-                    {YEAR_OPTIONS.map(y => <option key={y} value={y}>{y}</option>)}
+                    <option value="">เลือกชั้นปีที่ (ทั้งหมด)</option>
+                    {YEAR_OPTIONS.map(y => <option key={y} value={y}>ชั้นปีที่ {y}</option>)}
                   </select>
                 </div>
                 <div className="mb-4 p-4 bg-yellow-50 rounded-lg">
@@ -212,7 +212,7 @@ export default function ManageAdmins({ user }) {
         {showEditModal && editingAdmin && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">แก้ไขชั้นปีที่รับผิดชอบ</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">แก้ไขชั้นปีที่</h2>
               <form onSubmit={handleUpdateAdmin}>
                 <div className="mb-4">
                   <label className="block text-gray-700 font-semibold mb-2">Email</label>
@@ -224,14 +224,14 @@ export default function ManageAdmins({ user }) {
                   />
                 </div>
                 <div className="mb-6">
-                  <label className="block text-gray-700 font-semibold mb-2">ชั้นปีที่รับผิดชอบ</label>
+                  <label className="block text-gray-700 font-semibold mb-2">ชั้นปีที่</label>
                   <select
                     value={editYear}
                     onChange={(e) => setEditYear(e.target.value)}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   >
                     <option value="">ทั้งหมด</option>
-                    {YEAR_OPTIONS.map(y => <option key={y} value={y}>{y}</option>)}
+                    {YEAR_OPTIONS.map(y => <option key={y} value={y}>ชั้นปีที่ {y}</option>)}
                   </select>
                 </div>
                 <div className="flex gap-4">

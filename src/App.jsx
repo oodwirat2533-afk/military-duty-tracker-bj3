@@ -4,7 +4,6 @@ import Layout from './components/Layout'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
-import ManageClassrooms from './pages/ManageClassrooms'
 import AddStudent from './pages/AddStudent'
 import AddDuty from './pages/AddDuty'
 import RecordStatus from './pages/RecordStatus'
@@ -43,7 +42,6 @@ function App() {
         {/* Protected routes */}
         <Route element={<Layout user={user} onLogout={handleLogout} />}>
           <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/login" />} />
-          <Route path="/manage-classrooms" element={user ? <ManageClassrooms /> : <Navigate to="/login" />} />
           <Route path="/add-student" element={user ? <AddStudent /> : <Navigate to="/login" />} />
           <Route path="/add-duty" element={user ? <AddDuty /> : <Navigate to="/login" />} />
           <Route path="/record-status" element={user ? <RecordStatus /> : <Navigate to="/login" />} />

@@ -9,11 +9,11 @@ export default function Home() {
             โรงเรียนบรรหารแจ่มใสวิทยา 3
           </h1>
           <h2 className="text-2xl md:text-3xl font-semibold text-center text-green-700 mb-8">
-            ระบบเช็คสถานะการปฏิบัติหน้าที่นักศึกษาวิชาทหาร
+            ระบบเช็คสถานะการปฏิบัติหน้าที่นักเรียนวิชาทหาร
           </h2>
           
           <p className="text-gray-600 text-center mb-8 text-lg">
-            ระบบสำหรับตรวจสอบและบันทึกสถานะการปฏิบัติหน้าที่ของนักศึกษาวิชาทหาร
+            ระบบสำหรับตรวจสอบและบันทึกสถานะการปฏิบัติหน้าที่ของนักเรียนวิชาทหาร
           </p>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -27,14 +27,14 @@ export default function Home() {
               to="/student-status"
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-6 px-8 rounded-xl text-center text-xl transition duration-300 shadow-lg hover:shadow-xl"
             >
-              นักศึกษาดูสถานะ
+              นักเรียนดูสถานะ
             </Link>
           </div>
 
           <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <h3 className="font-semibold text-blue-800 mb-2">ลิงก์สำหรับนักศึกษาดูสถานะ:</h3>
+            <h3 className="font-semibold text-blue-800 mb-2">ลิงก์สำหรับนักเรียนดูสถานะ:</h3>
             <p className="text-sm text-blue-600">
-              นักศึกษาสามารถดูสถานะการปฏิบัติหน้าที่ได้โดยคลิกที่ปุ่ม "นักศึกษาดูสถานะ" 
+              นักเรียนสามารถดูสถานะการปฏิบัติหน้าที่ได้โดยคลิกที่ปุ่ม "นักเรียนดูสถานะ" 
               หรือใช้ลิงก์โดยตรง: <span className="font-mono bg-white px-2 py-1 rounded">/student-status</span>
             </p>
           </div>

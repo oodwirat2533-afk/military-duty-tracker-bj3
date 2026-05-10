@@ -86,7 +86,7 @@ export default function AddStudent() {
 
   const downloadTemplate = () => {
     const templateData = [
-      ['รหัสประจำตัวนักเรียน', 'ชื่อ-นามสกุล', 'ชั้นปี', 'ห้องเรียน', 'เลขที่'],
+      ['รหัสประจำตัวนักเรียน', 'ชื่อ-นามสกุล', 'ระดับชั้น', 'ห้องเรียน', 'เลขที่'],
       ['56001', 'สมชาย ใจดี', 'ม.4', '4/1', '1'],
       ['56002', 'สมหญิง รักเรียน', 'ม.4', '4/1', '2']
     ]
@@ -158,14 +158,14 @@ export default function AddStudent() {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 font-semibold mb-2">ชั้นปี</label>
+                  <label className="block text-gray-700 font-semibold mb-2">ระดับชั้น</label>
                   <select
                     value={student.year}
                     onChange={(e) => setStudent({ ...student, year: e.target.value })}
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                     required
                   >
-                    <option value="">เลือกชั้นปี</option>
+                    <option value="">เลือกระดับชั้น</option>
                     {YEAR_OPTIONS.map(y => (
                       <option key={y} value={y}>{y}</option>
                     ))}
@@ -174,26 +174,32 @@ export default function AddStudent() {
 
                 <div>
                   <label className="block text-gray-700 font-semibold mb-2">ห้องเรียน</label>
-                  <input
-                    type="text"
+                  <select
                     value={student.classroom}
                     onChange={(e) => setStudent({ ...student, classroom: e.target.value })}
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                     required
-                    placeholder="เช่น 4/1, 5/2"
-                  />
+                  >
+                    <option value="">เลือกห้องเรียน</option>
+                    {Array.from({ length: 11 }, (_, i) => i + 1).map(n => (
+                      <option key={n} value={n}>{n}</option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>
                   <label className="block text-gray-700 font-semibold mb-2">เลขที่</label>
-                  <input
-                    type="text"
+                  <select
                     value={student.number}
                     onChange={(e) => setStudent({ ...student, number: e.target.value })}
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                     required
-                    placeholder="กรอกเลขที่"
-                  />
+                  >
+                    <option value="">เลือกเลขที่</option>
+                    {Array.from({ length: 45 }, (_, i) => i + 1).map(n => (
+                      <option key={n} value={n}>{n}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
 

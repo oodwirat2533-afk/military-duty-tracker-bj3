@@ -55,7 +55,7 @@ export default async function handler(req, res) {
       const students = await readTab(TABS.STUDENTS)
       const index = students.findIndex(s => s['รหัสประจำตัวนักเรียน'] === student_id)
       if (index === -1) {
-        return res.status(404).json({ error: 'ไม่พบนักศึกษา' })
+        return res.status(404).json({ error: 'ไม่พบนักเรียน' })
       }
       const range = `${TABS.STUDENTS}!A${index + 2}:F${index + 2}`
       const data = [[student_id, name, year, classroom, number, students[index]['วันที่เพิ่ม']]]
@@ -66,7 +66,7 @@ export default async function handler(req, res) {
       const students = await readTab(TABS.STUDENTS)
       const index = students.findIndex(s => s['รหัสประจำตัวนักเรียน'] === student_id)
       if (index === -1) {
-        return res.status(404).json({ error: 'ไม่พบนักศึกษา' })
+        return res.status(404).json({ error: 'ไม่พบนักเรียน' })
       }
       await deleteRow(TABS.STUDENTS, index + 1)
       res.json({ success: true })

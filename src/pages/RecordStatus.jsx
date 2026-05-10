@@ -99,7 +99,15 @@ export default function RecordStatus() {
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-green-800 mb-8">บันทึกสถานะ</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-green-800">บันทึกสถานะ</h1>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded-lg"
+          >
+            ← กลับ Dashboard
+          </button>
+        </div>
 
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           <div className="grid md:grid-cols-2 gap-4">
@@ -141,7 +149,7 @@ export default function RecordStatus() {
           <div className="text-center py-8">กำลังโหลด...</div>
         ) : students.length === 0 ? (
           <div className="bg-white rounded-lg shadow-lg p-8 text-center text-gray-500">
-            {selectedDuty ? 'ไม่มีนักศึกษาในห้องชั้นปีที่เลือก' : 'กรุณาเลือกงาน'}
+            {selectedDuty ? 'ไม่มีนักเรียนในห้องชั้นปีที่เลือก' : 'กรุณาเลือกงาน'}
           </div>
         ) : (
           <form onSubmit={handleSubmit}>

@@ -21,7 +21,7 @@ export default function StudentStatus() {
     try {
       const response = await axios.get(`/api/status/student/${studentId}`)
       if (response.data.length === 0) {
-        setError('ไม่พบข้อมูลนักศึกษาหรือยังไม่มีการบันทึกสถานะ')
+        setError('ไม่พบข้อมูลนักเรียนหรือยังไม่มีการบันทึกสถานะ')
       } else {
         setStudentData({
           info: response.data[0],
@@ -75,7 +75,7 @@ export default function StudentStatus() {
           {studentData && (
             <div>
               <div className="bg-blue-50 rounded-xl p-6 mb-6">
-                <h3 className="text-xl font-semibold text-blue-800 mb-2">ข้อมูลนักศึกษา</h3>
+                <h3 className="text-xl font-semibold text-blue-800 mb-2">ข้อมูลนักเรียน</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <span className="text-gray-600">ชื่อ:</span>

@@ -1,31 +1,12 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 export default function Dashboard({ user }) {
-  const navigate = useNavigate()
-
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-green-800 mb-8">Dashboard Admin</h1>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <Link
-            to="/manage-classrooms"
-            className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition duration-300"
-          >
-            <div className="flex items-center gap-4">
-              <div className="bg-green-100 p-3 rounded-full">
-                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-gray-800">จัดการห้องชั้นปี</h2>
-                <p className="text-gray-600 text-sm">สร้างและจัดการห้องชั้นปี (ปีที่ 1-3)</p>
-              </div>
-            </div>
-          </Link>
-
           <Link
             to="/add-student"
             className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition duration-300"
@@ -37,8 +18,8 @@ export default function Dashboard({ user }) {
                 </svg>
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-800">เพิ่มนักศึกษา</h2>
-                <p className="text-gray-600 text-sm">เพิ่มนักศึกษาวิชาทหารใหม่</p>
+                <h2 className="text-xl font-semibold text-gray-800">เพิ่มนักเรียน</h2>
+                <p className="text-gray-600 text-sm">เพิ่มนักเรียนวิชาทหารใหม่</p>
               </div>
             </div>
           </Link>
@@ -115,9 +96,9 @@ export default function Dashboard({ user }) {
         </div>
 
         <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">ลิงก์สำหรับนักศึกษาดูสถานะ</h3>
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">ลิงก์สำหรับนักเรียนดูสถานะ</h3>
           <div className="bg-gray-50 p-4 rounded-lg">
-            <p className="text-gray-600 mb-2">นักศึกษาสามารถดูสถานะการปฏิบัติหน้าที่ได้ที่:</p>
+            <p className="text-gray-600 mb-2">นักเรียนสามารถดูสถานะการปฏิบัติหน้าที่ได้ที่:</p>
             <div className="flex items-center gap-2">
               <code className="flex-1 bg-white px-4 py-2 rounded border text-sm">
                 {window.location.origin}/student-status
