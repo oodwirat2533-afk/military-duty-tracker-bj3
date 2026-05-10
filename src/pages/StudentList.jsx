@@ -57,7 +57,7 @@ export default function StudentList({ user }) {
 
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           <div className="flex items-center gap-4 flex-wrap">
-            <span className="text-gray-700 font-semibold">กรองตามระดับชั้น:</span>
+            <span className="text-gray-700 font-semibold">กรองตามชั้นปีที่รับผิดชอบ:</span>
             {isSuperAdmin ? (
               <select
                 value={filterYear}

@@ -43,7 +43,7 @@ function App() {
         {/* Protected routes */}
         <Route element={<Layout user={user} onLogout={handleLogout} />}>
           <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/login" />} />
-          <Route path="/add-student" element={user ? <AddStudent /> : <Navigate to="/login" />} />
+          <Route path="/add-student" element={user ? <AddStudent user={user} /> : <Navigate to="/login" />} />
           <Route path="/add-duty" element={user ? <AddDuty /> : <Navigate to="/login" />} />
           <Route path="/record-status" element={user ? <RecordStatus /> : <Navigate to="/login" />} />
           <Route path="/manage-admins" element={user ? <ManageAdmins user={user} /> : <Navigate to="/login" />} />

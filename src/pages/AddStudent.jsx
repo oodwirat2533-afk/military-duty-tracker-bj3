@@ -5,7 +5,7 @@ import * as XLSX from 'xlsx'
 
 const YEAR_OPTIONS = ['1', '2', '3']
 
-export default function AddStudent() {
+export default function AddStudent({ user }) {
   const [loading, setLoading] = useState(false)
   const [mode, setMode] = useState('single') // 'single' | 'bulk'
   const [student, setStudent] = useState({
@@ -23,7 +23,7 @@ export default function AddStudent() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await axios.post('/api/students', student)
+      await axios.post('/api/students', { ...student, year_level: user?.year_level || '' })
       alert('เพิ่มนักเรียนสำเร็จ')
       setStudent({ name: '', student_id: '', year: '', classroom: '', number: '' })
     } catch (error) {
@@ -74,7 +74,7 @@ export default function AddStudent() {
       return
     }
     try {
-      await axios.post('/api/students', { students: importedStudents })
+      await axios.post('/api/students', { students: importedStudents, year_level: user?.year_level || '' })
       alert(`นำเข้านักเรียนสำเร็จ ${importedStudents.length} คน`)
       setImportedStudents([])
       if (fileInputRef.current) fileInputRef.current.value = ''

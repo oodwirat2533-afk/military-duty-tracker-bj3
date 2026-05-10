@@ -23,16 +23,18 @@ export default async function handler(req, res) {
         year: s['ชั้นปี'] || '',
         classroom: s['ห้องเรียน'] || '',
         number: s['เลขที่'] || '',
+        year_level: s['ชั้นปีที่'] || '',
         created_at: s['วันที่เพิ่ม'] || ''
       }))
-      // Filter by year_level if provided
+      // Filter by year_level (admin's year_level) if provided
       const { year_level } = req.query || {}
       if (year_level) {
-        mappedStudents = mappedStudents.filter(s => s.year === year_level)
+        mappedStudents = mappedStudents.filter(s => s.year_level === year_level)
       }
       res.json(mappedStudents)
     } else if (req.method === 'POST') {
       const body = req.body
+      const year_level = body.year_level || ''
       // Bulk import (array of students)
       if (Array.isArray(body.students)) {
         const students = body.students
@@ -43,6 +45,7 @@ export default async function handler(req, res) {
             student.year,
             student.classroom,
             student.number,
+            year_level,
             new Date().toISOString().split('T')[0]
           ]
           await appendToTab(TABS.STUDENTS, data)
@@ -51,19 +54,19 @@ export default async function handler(req, res) {
       } else {
         // Single student
         const { student_id, name, year, classroom, number } = body
-        const data = [student_id, name, year, classroom, number, new Date().toISOString().split('T')[0]]
+        const data = [student_id, name, year, classroom, number, year_level, new Date().toISOString().split('T')[0]]
         await appendToTab(TABS.STUDENTS, data)
         res.json({ success: true })
       }
     } else if (req.method === 'PUT') {
-      const { student_id, name, year, classroom, number } = req.body
+      const { student_id, name, year, classroom, number, year_level } = req.body
       const students = await readTab(TABS.STUDENTS)
       const index = students.findIndex(s => s['รหัสประจำตัวนักเรียน'] === student_id)
       if (index === -1) {
         return res.status(404).json({ error: 'ไม่พบนักเรียน' })
       }
-      const range = `${TABS.STUDENTS}!A${index + 2}:F${index + 2}`
-      const data = [[student_id, name, year, classroom, number, students[index]['วันที่เพิ่ม']]]
+      const range = `${TABS.STUDENTS}!A${index + 2}:G${index + 2}`
+      const data = [[student_id, name, year, classroom, number, year_level, students[index]['วันที่เพิ่ม']]]
       await updateTab(TABS.STUDENTS, range, data)
       res.json({ success: true })
     } else if (req.method === 'DELETE') {
