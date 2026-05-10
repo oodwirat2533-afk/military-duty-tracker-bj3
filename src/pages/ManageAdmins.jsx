@@ -44,7 +44,7 @@ export default function ManageAdmins({ user }) {
   const handleDeleteAdmin = async (email) => {
     if (!confirm(`คุณต้องการลบ Admin ${email} ใช่หรือไม่?`)) return
     try {
-      await axios.delete(`/api/admins/${email}`)
+      await axios.delete('/api/admins', { data: { Email: email } })
       fetchAdmins()
       alert('ลบ Admin สำเร็จ')
     } catch (error) {

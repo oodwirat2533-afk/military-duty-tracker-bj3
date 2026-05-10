@@ -41,7 +41,7 @@ export default function Login({ onLogin }) {
 
   const handleCredentialResponse = async (response) => {
     try {
-      const res = await axios.post('/api/auth/google', { token: response.credential })
+      const res = await axios.post('/api/auth', { token: response.credential })
       
       if (res.data.success) {
         onLogin(res.data.user)

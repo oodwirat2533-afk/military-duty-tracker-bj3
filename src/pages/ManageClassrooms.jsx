@@ -41,7 +41,7 @@ export default function ManageClassrooms() {
   const handleDeleteClassroom = async (id) => {
     if (!confirm('คุณต้องการลบห้องชั้นปีนี้ใช่หรือไม่?')) return
     try {
-      await axios.delete(`/api/classrooms/${id}`)
+      await axios.delete('/api/classrooms', { data: { รหัสห้องชั้นปี: id } })
       fetchClassrooms()
     } catch (error) {
       console.error('Error deleting classroom:', error)
