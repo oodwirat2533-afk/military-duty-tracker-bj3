@@ -103,7 +103,7 @@ export default function StudentList({ user }) {
                   <tr key={index} className="border-b hover:bg-gray-50">
                     <td className="px-6 py-4">{student.student_id}</td>
                     <td className="px-6 py-4">{student.name}</td>
-                    <td className="px-6 py-4">{student.year ? `ชั้นปีที่ ${student.year}` : '-'}</td>
+                    <td className="px-6 py-4">{student.year || '-'}</td>
                     <td className="px-6 py-4">{student.classroom}</td>
                     <td className="px-6 py-4">{student.number}</td>
                   </tr>

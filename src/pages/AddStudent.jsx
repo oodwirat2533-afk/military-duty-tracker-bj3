@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import * as XLSX from 'xlsx'
 
-const YEAR_OPTIONS = ['1', '2', '3']
+const YEAR_OPTIONS = ['ม.4', 'ม.5', 'ม.6']
 
 export default function AddStudent({ user }) {
   const [loading, setLoading] = useState(false)
@@ -87,8 +87,8 @@ export default function AddStudent({ user }) {
   const downloadTemplate = () => {
     const templateData = [
       ['รหัสประจำตัวนักเรียน', 'ชื่อ-นามสกุล', 'ระดับชั้น', 'ห้องเรียน', 'เลขที่'],
-      ['56001', 'สมชาย ใจดี', '1', '1', '1'],
-      ['56002', 'สมหญิง รักเรียน', '1', '1', '2']
+      ['56001', 'สมชาย ใจดี', 'ม.4', '4/1', '1'],
+      ['56002', 'สมหญิง รักเรียน', 'ม.4', '4/1', '2']
     ]
     const ws = XLSX.utils.aoa_to_sheet(templateData)
     const wb = XLSX.utils.book_new()
@@ -167,7 +167,7 @@ export default function AddStudent({ user }) {
                   >
                     <option value="">เลือกระดับชั้น</option>
                     {YEAR_OPTIONS.map(y => (
-                      <option key={y} value={y}>ชั้นปีที่ {y}</option>
+                      <option key={y} value={y}>{y}</option>
                     ))}
                   </select>
                 </div>
@@ -285,7 +285,7 @@ export default function AddStudent({ user }) {
                         <tr key={i} className="border-b hover:bg-gray-50">
                           <td className="px-4 py-2">{s.student_id}</td>
                           <td className="px-4 py-2">{s.name}</td>
-                          <td className="px-4 py-2">{s.year ? `ชั้นปีที่ ${s.year}` : '-'}</td>
+                          <td className="px-4 py-2">{s.year || '-'}</td>
                           <td className="px-4 py-2">{s.classroom}</td>
                           <td className="px-4 py-2">{s.number}</td>
                           <td className="px-4 py-2 text-center">
